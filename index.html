@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: none;
+            padding: none;
+            font-family: monospace;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            background-color: rgb(248, 221, 124);
+        }
+
+        body div.background {
+            background-color: darkmagenta;
+            width: 300px;
+            height: 300px;
+            padding: 5%;
+            border-radius: 8px;
+        }
+
+        .inputBox {
+            position: relative;
+        }
+
+        #typeInput {
+            position: fixed;
+            top: 300px;
+
+        }
+
+        #interface {
+            padding: 5px;
+        }
+
+        body div h2 {
+            color: white;
+        }
+
+        .guidelines {
+            font-size: x-small;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background">
+        <h2>NUMBER GUESSING GAME</h2>
+        <p>
+        <h3 id="interface">Hi there! Welcome.
+            <br>
+            <ul>
+                <li>
+                    <p class="guidelines"> Type 'a' to show remaining attempts.</p>
+                </li>
+                <li>
+                    <p class="guidelines"> Type 'r' to reset the game.</p>
+                </li>
+                <li>
+                    <p class="guidelines">Type a number and press ENTER</p>
+                </li>
+                <li>
+                    <p class="guidelines" id="gameStarts"></p>
+                </li>
+            </ul>
+        </h3>
+        </p>
+        <div class="inputBox">
+            <input type="text" placeholder="Type Here!" id="typeInput" disabled>
+        </div>
+
+    </div>
+
+    <script>
+        let interface = document.getElementById("interface");
+        let input = document.getElementById("typeInput");
+        let gameStarts = document.getElementById("gameStarts");
+        
+
+        secretNumber = 0;
+        attempts = 0;
+        maxAttempts = 5;
+        gameOver = false;
+        function startGame() {
+            secretNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameOver = false;
+            interface.innerText = "Game started! Guess a number between 1 and 100.";
+        };
+
+        function makeGuess(guess) {
+            if (gameOver) {
+                interface.innerText = "Game over! The number was " + secretNumber + "." + " Type 'r' to restart.";
+            }
+            attempts++;
+
+            if (attempts >= maxAttempts) {
+                gameOver = true;
+                interface.innerText = "Game over! The number was " + secretNumber + "." + " Type 'r' to restart.";
+               
+            }
+
+            else if (guess === secretNumber) {
+                gameOver = true;
+                interface.innerText = "Correct! You won in " + attempts + " attempts." + " Type 'r' to restart.";
+              
+            }
+
+            else if (guess > secretNumber) {
+                interface.innerText = "Too high! Try again.";
+                
+            }
+
+            else if (guess < secretNumber) {
+                interface.innerText = "Too low! Try again.";
+            }
+
+            else if (Number(guess)==true) {
+                interface.innerText = "Type a number! Try again.";
+            }
+        };
+
+        function getRemainingAttempts() {
+            remainingAttempts = maxAttempts - attempts;
+            interface.innerText = "You have " + remainingAttempts + " attempts left.";
+        };
+
+        function resetGame() {
+            startGame();
+        };
+
+        // Game starts in 5sec
+        let countSec = 6
+        setInterval(() => {
+            countSec--;
+            if (countSec == 0) {
+                startGame();
+                input.removeAttribute("disabled");
+            }
+            gameStarts.innerText = "The game starts in " + countSec + " seconds.";
+        }, 1000);
+
+        // // Start game
+        // setTimeout(() => {
+        //     startGame()
+        // }, 5000);
+
+        //  Add event listener
+        input.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                let guessMade = parseInt(input.value);
+                makeGuess(guessMade);
+                input.value = ''; // clear input
+            }
+        });
+
+        // Remanining attempts
+        input.addEventListener("keyup", (e) => {
+            if (e.key === "a") {
+                getRemainingAttempts();
+                input.value = "";
+            }
+        });
+
+        // Reset game
+        input.addEventListener("keyup", (e) => {
+            if (e.key === "r") {
+                resetGame();
+                input.value = "";
+            }
+        });
+    </script>
+</body>
+
+</html>
