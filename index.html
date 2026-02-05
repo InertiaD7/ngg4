@@ -122,7 +122,7 @@
                 interface.innerText = "Too low! Try again.";
             }
 
-            else if (Number(guess)==true) {
+            else if (Number(guess)!==true) {
                 interface.innerText = "Type a number! Try again.";
             }
         };
@@ -178,5 +178,6 @@
         });
     </script>
 </body>
+
 
 </html>
